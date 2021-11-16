@@ -5,8 +5,8 @@
       class="banner"
       title="Thank you for your order!"
       :image="{
-        mobile: '/thank-you/bannerM.png',
-        desktop: '/thank-you/bannerD.png',
+        mobile: addBasePath('/thank-you/bannerM.png'),
+        desktop: addBasePath('/thank-you/bannerD.png'),
       }"
     >
       <template #description>
@@ -77,6 +77,7 @@
 <script>
 import { computed, useRoute } from '@nuxtjs/composition-api';
 import { SfHeading, SfButton, SfCallToAction } from '@storefront-ui/vue';
+import { addBasePath } from '@vue-storefront/core';
 
 export default {
   components: {
@@ -89,6 +90,7 @@ export default {
     const orderNumber = computed(() => `#${ route.value.query.order }`);
 
     return {
+      addBasePath,
       address: {
         name: 'Company Headquarter',
         street: 'St. Main 17, 53-534',
