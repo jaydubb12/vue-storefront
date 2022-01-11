@@ -2,15 +2,17 @@
   "name": "@vue-storefront/core",
   "version": "2.5.0",
   "sideEffects": false,
+  "yarn": true,
   "main": "lib/index.cjs.js",
   "module": "lib/index.es.js",
   "mainServer": "server/index.js",
   "types": "lib/src/index.d.ts",
   "scripts": {
-    "build": "rimraf lib && rollup -c rollup.config.js",
-    "dev": "rimraf lib && rollup -c rollup.config.js -w",
+    "build": "rimraf lib && rollup -c rollup.config.js && yarn ts-coverage",
+    "dev": "rimraf lib && type-coverage && rollup -c rollup.config.js -w && yarn ts-coverage",
     "test": "jest",
-    "prepublish": "yarn build"
+    "prepublish": "yarn build",
+    "ts-coverage": "typescript-coverage-report"
   },
   "dependencies": {
     "axios": "0.21.1",
@@ -21,11 +23,12 @@
   },
   "devDependencies": {
     "@nuxt/types": "^2.15.7",
+    "@nuxtjs/composition-api": "^0.29.3",
     "@types/express": "^4.11.1",
     "@vue/test-utils": "^1.0.0-beta.30",
     "jsdom": "^16.6.0",
     "jsdom-global": "^3.0.2",
-    "vue-template-compiler": "^2.6.x"
+    "vue-template-compiler": "^2.6.11"
   },
   "peerDependencies": {
     "@nuxtjs/composition-api": "^0.29.3"
@@ -36,5 +39,28 @@
   ],
   "publishConfig": {
     "access": "public"
+  },
+  "typeCoverage": {
+    "atLeast": 88.55,
+    "is": 99,
+    "cache": false,
+    "debug": false,
+    "detail": false,
+    "ignoreCatch": true,
+    "ignoreFiles": [
+      "__tests__/**",
+      "node_modules/**",
+      "lib/**"
+    ],
+    "strict": false,
+    "suppressError": false,
+    "update": true,
+    "ignoreUnread": false,
+    "ignoreNested": false,
+    "ignoreAsAssertion": false,
+    "ignoreTypeAssertion": false,
+    "ignoreNonNullAssertion": false,
+    "showRelativePath": true,
+    "historyFile": "typecoverage.json"
   }
 }
