@@ -3,15 +3,20 @@
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended", // Does not include type checking
+    "plugin:@typescript-eslint/recommended-requiring-type-checking", // High value rules for type checking
+    //"typed-fp",
+    "plugin:import/recommended", // combination of import/errors and import/warnings
+    "plugin:import/typescript", // enables ability to set import rules
+    "plugin:vue/recommended",
+    "@vue/typescript" //sets plugin and parser options and turns off conflicting rules in eslint:recommended
   ],
-  "parser": "vue-eslint-parser",
-  "parserOptions": {
-    "parser": "@typescript-eslint/parser",
-    "ecmaVersion": 2017,
-    "sourceType": "module"
-  },
-  "plugins": ["vue", "@typescript-eslint"],
+  "plugins": [
+    "@typescript-eslint",
+    "import",
+    "vue"
+  ],
+
   "env": {
     "browser": true,
     "commonjs": true,
@@ -25,7 +30,109 @@
     "Set": true,
     "Intl": true
   },
+  "parser": "vue-eslint-parser", // enables eslint to lint <template> of vue files
+  "parserOptions": {
+    "parser": "@typescript-eslint/parser",
+    "project": [
+      "./tsconfig.json"],
+    "ecmaVersion": 2018, // required for eslint-config-typed-fp
+    "allowImportExportAnywhere": true,
+    "debugLevel": false,
+    "sourceType": "module",
+    "createDefaultProgram": false,
+    "extraFileExtensions": [".vue"],  // allows @typescript-eslint/parser to incl. vue
+    "vueFeatures": {
+      "filter": true, //If you specify false, the parser does not parse | as a filter, and is parsed similar to vue3
+      "interpolationAsNonHTML": false, //when = true, will be parsed as Vue3
+      "styleCSSVariableInjection": true
+    },
+    "warnOnUnsupportedTypeScriptVersion": true
+  },
+  "settings": {
+    "eslint-import-resolver-custom-alias": {
+      "alias": {
+        "components": "./components",
+        "composables": "./composables",
+
+
+        "extensions": [
+          ".js",
+          ".jsx",
+          ".vue",
+          ".ts",
+          ".tsx",
+          ".json"
+        ],
+        "packages": [
+          "node_modules",
+          "packages/core/cache",
+          "packages/core/middleware",
+          "packages/core/nuxt-module",
+          "packages/core/nuxt-theme-module",
+          "packages/boilerplate/api-client",
+          "packages/boilerplate/composables",
+          "packages/boilerplate/theme"
+        ]
+      }
+    },
+    "import/extensions": [
+      //A list of file extensions that will be parsed as modules and inspected for exports.
+      ".js",
+      ".jsx",
+      ".ts",
+      ".tsx",
+      ".vue",
+      ".mjs"
+    ],
+    "import/resolver": {
+      "node": {
+        "extensions": [
+          ".js",
+          ".jsx",
+          ".ts",
+          ".tsx",
+          ".json",
+          ".mjs",
+          ".vue"
+        ],
+        "moduleDirectory": [
+          "node_modules",
+          "packages/core/cache",
+          "packages/core/middleware",
+          "packages/core/nuxt-module",
+          "packages/core/nuxt-theme-module",
+          "packages/boilerplate/api-client",
+          "packages/boilerplate/composables",
+          "packages/boilerplate/theme"
+        ]
+      },
+      "nuxt": {
+        "nuxtSrcDir": "nuxt",
+        "extensions": [
+          ".js",
+          ".jsx",
+          ".json",
+          ".vue",
+          ".ts",
+          ".tsx",
+          ".mjs"
+        ],
+        "moduleDirectory": [
+          "node_modules",
+          "packages/core/cache",
+          "packages/core/core",
+          "packages/core/middleware",
+          "packages/core/nuxt-module",
+          "packages/core/nuxt-theme-module",
+          "packages/boilerplate/api-client",
+          "packages/boilerplate/composables",
+          "packages/boilerplate/theme"
+        ]
+      }
+    }
+  },
   "rules": {
+    "no-console": 1,
     "eqeqeq": 2,
     "no-use-before-define": [
       2,
@@ -34,16 +141,14 @@
       }
     ],
     "no-undef": 2,
-    "no-unused-vars": 2,
+    "no-unused-vars": 0,
     "brace-style": 2,
     "no-mixed-spaces-and-tabs": 2,
     "key-spacing": 2,
     "comma-spacing": 2,
     "array-bracket-spacing": 2,
     "space-in-parens": 2,
-    "no-trailing-spaces": 2,
-    "comma-dangle": 2,
-    "comma-style": 2,
+    "no-trailing-spaces": "off",
     "space-infix-ops": 2,
     "keyword-spacing": 2,
     "space-before-blocks": 2,
@@ -69,9 +174,9 @@
     "no-extend-native": 2,
     "no-extra-bind": 2,
     "no-implicit-coercion": 2,
+    "no-inline-comments": 0,
     "no-multi-spaces": 2,
     "no-useless-return": 2,
-    "no-console": 0,
     "global-require": 1,
     "camelcase": 0,
     "computed-property-spacing": 2,
@@ -86,14 +191,7 @@
         "allowArrowFunctions": true
       }
     ],
-    "indent": [
-      2,
-      2,
-      {
-        "SwitchCase": 1
-      }
-    ],
-    "line-comment-position": 2,
+    "line-comment-position": 0,
     "linebreak-style": 2,
     "lines-around-comment": 2,
     "max-statements-per-line": 2,
@@ -117,22 +215,84 @@
     "eol-last": 2,
     "newline-after-var": 0,
     "no-var": 2,
-    "@typescript-eslint/no-empty-function": 0,
+
+    // import rules
+    "import/default": 1,
+    "import/export": 1,
+    "import/named": "off",
+    "import/namespace": "off",
+    "import/no-commonjs": 1, //https://github.com/import-js/eslint-plugin-import/blob/master/docs/rules/no-commonjs.md
+    "import/no-dynamic-require": 1 ,
+    "import/no-import-module-exports": "off",
+    "import/no-internal-modules": "off",
+    "import/no-named-default": 1,
+    "import/no-nodejs-modules": "off",
+    "import/no-unresolved": 2,
+    "import/no-restricted-imports": "off",
+    "import/no-webpack-loader-syntax": 1,
+    "import/no-relative-parent-imports": "off",
+    "import/no-relative-packages": "off",
+    "import/prefer-default-export": "off",
+    "import/unambiguous": 1,
+    "import/no-unassigned-import": 1,
+
+    // es5
+    "symbol-description": "off",
+
+    // node
+    "node/no-unsupported-features/es-syntax": "off",
+
+    // functional
+    "functional/functional-parameters": 0,
+    "functional/immutable-data": 0,
+    "functional/no-conditional-statement": 0,
+    "functional/no-expression-statement": 0,
+    "functional/no-let": "off",
+    "functional/no-mixed-type": "off",
+    "functional/no-return-void": "off",
+    "functional/no-try-statement": "off",
+    "functional/prefer-readonly-type": "off",
+
+    // typescript
     "no-case-declarations": 0,
-    "@typescript-eslint/no-var-requires": 0,
-    "@typescript-eslint/no-explicit-any": 0,
-    "@typescript-eslint/explicit-function-return-type": 0,
-    "@typescript-eslint/no-unused-vars": 2,
+    "@typescript-eslint/require-await": 1,
     "@typescript-eslint/ban-ts-ignore": 0,
-    "@typescript-eslint/explicit-module-boundary-types": 0
-  },
-  "overrides": [
-    {
-      "files": "*.ts",
-      "rules": {
-        "no-undef": "off",
-        "no-unused-vars": "off"
-      }
-    }
-  ]
+    "@typescript-eslint/ban-ts-comment": 0,
+    "@typescript-eslint/ban-types": 0,
+    "@typescript-eslint/array-type": 1,
+    "@typescript-eslint/consistent-type-definitions": 0,  // requires large refactoring to interfaces to use type alias
+    "@typescript-eslint/consistent-type-imports": 1,
+    "@typescript-eslint/dot-notation": 1,
+    "@typescript-eslint/explicit-module-boundary-types": 0,
+    "@typescript-eslint/explicit-function-return-type": 0,
+    "@typescript-eslint/explicit-member-accessibility": 1,
+    "@typescript-eslint/no-require-imports": 0, // settings for import vs require handled by other settings
+    "@typescript-eslint/restrict-plus-operands": 1,
+    "@typescript-eslint/restrict-template-expressions": 1,
+    "@typescript-eslint/no-duplicate-imports": "off", // settings maintained at global level
+    "@typescript-eslint/no-explicit-any": 0,
+    "@typescript-eslint/no-empty-function": 0,
+    "@typescript-eslint/no-implicit-any-catch": 0,
+    "@typescript-eslint/no-inferrable-types": 1,
+    "@typescript-eslint/no-misused-promises": 1,
+    "@typescript-eslint/no-type-alias": 0, // type alias should be allowed
+    "@typescript-eslint/no-invalid-this": 1,
+    "@typescript-eslint/no-use-before-define": 1,
+    "@typescript-eslint/no-unused-vars": 0,
+    "@typescript-eslint/no-unsafe-assignment": 0,
+    "@typescript-eslint/no-unsafe-return": 0,
+    "@typescript-eslint/no-unsafe-member-access": 0,
+    "@typescript-eslint/no-unsafe-call": 0,
+    "@typescript-eslint/no-useless-constructor": 1,
+    "@typescript-eslint/no-unnecessary-condition": "off", // requires strict null checks to be enabled
+    "@typescript-eslint/no-shadow": 1,
+    "@typescript-eslint/no-var-requires": 0,
+    "@typescript-eslint/strict-boolean-expressions": "off",
+    "@typescript-eslint/prefer-readonly-parameter-types": "off",
+    "@typescript-eslint/triple-slash-reference": "off",
+    "@typescript-eslint/typedef": 1,
+
+    // vue
+    "vue/no-unused-vars": 1
+  }
 }
