@@ -1,6 +1,6 @@
-import { UseBilling, Context, FactoryParams, UseBillingErrors, CustomQuery, PlatformApi } from '../types';
-import { Ref, computed } from '@nuxtjs/composition-api';
-import { sharedRef, Logger, configureFactoryParams } from '../utils';
+import { Context, CustomQuery, FactoryParams, PlatformApi, UseBilling, UseBillingErrors } from '../types';
+import { computed, Ref } from '@nuxtjs/composition-api';
+import { configureFactoryParams, Logger, sharedRef } from '../utils';
 
 export interface UseBillingParams<BILLING, BILLING_PARAMS, API extends PlatformApi = any> extends FactoryParams<API> {
   load: (context: Context, params: { customQuery?: CustomQuery }) => Promise<BILLING>;
@@ -20,6 +20,8 @@ export const useBillingFactory = <BILLING, BILLING_PARAMS, API extends PlatformA
 
     const _factoryParams = configureFactoryParams(
       factoryParams,
+      // @ts-ignore
+      // todo remediate defect 6603
       { mainRef: billing, alias: 'currentBilling', loading, error }
     );
 

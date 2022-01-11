@@ -67,7 +67,7 @@ const registerLogger = (loggerImplementation: LoggerImplementation, verbosity: s
       };
   }
 };
-
+// @ts-ignore
 registerLogger(defaultLogger, defaultModes[process.env.NODE_ENV] || defaultModes.default);
 
 export {

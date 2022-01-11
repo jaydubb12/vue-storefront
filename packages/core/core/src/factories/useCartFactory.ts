@@ -1,6 +1,7 @@
-import { CustomQuery, UseCart, Context, FactoryParams, UseCartErrors, PlatformApi } from '../types';
-import { Ref, computed } from '@nuxtjs/composition-api';
-import { sharedRef, Logger, configureFactoryParams } from '../utils';
+import type { Context, CustomQuery, FactoryParams, PlatformApi, UseCart, UseCartErrors } from '../types';
+import type { Ref } from '@nuxtjs/composition-api';
+import { computed } from '@nuxtjs/composition-api';
+import { configureFactoryParams, Logger, sharedRef } from '../utils';
 
 export interface UseCartFactoryParams<CART, CART_ITEM, PRODUCT, API extends PlatformApi = any> extends FactoryParams<API> {
   load: (context: Context, params: { customQuery?: any }) => Promise<CART>;
@@ -45,6 +46,8 @@ export const useCartFactory = <CART, CART_ITEM, PRODUCT, API extends PlatformApi
 
     const _factoryParams = configureFactoryParams(
       factoryParams,
+      // @ts-ignore
+      // todo remediate defect 6603
       { mainRef: cart, alias: 'currentCart', loading, error }
     );
 
