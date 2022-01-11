@@ -1,19 +1,58 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "include": ["src"],
+  "exclude": ["node_modules", "**/*.spec.ts"],
   "compilerOptions": {
-    "outDir": "./lib",
-    "esModuleInterop": true,
-    "target": "es5",
-    "module": "ES2015",
+    "baseUrl": "./",
+    "target": "es6",
+    "lib": ["es6", "es7", "dom"],
+    "plugins": [
+      {
+        "name": "typescript-eslint-language-service"
+      }
+    ],
+
+    /* Module Resolution Options */
+    "module": "es6",
     "moduleResolution": "node",
+    "declaration": true,                      /* Generates corresponding '.d.ts' file. */
     "importHelpers": true,
     "noEmitHelpers": true,
     "sourceMap": true,
-    "declaration": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "baseUrl": "./",
-    "lib": ["es6", "es7", "dom"],
-    "strict": false
-  },
-  "exclude": ["node_modules", "**/*.spec.ts"]
+    "outDir": "./lib",
+    "esModuleInterop": true,
+    "preserveSymlinks": true,                 /* Allows symlink resolution to real path */
+
+
+    /* Diagnostics */
+    "diagnostics": true,                    /* output compiler diagnostics */
+
+    /* Type Checking */
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "noImplicitReturns": true,                   /* Report error when not all code paths in function return a value. */
+    "noImplicitAny": false,                      /* Raise error on expressions and declarations with an implied 'any' type. */
+    "noImplicitThis": false,                     /* Raise error on 'this' expressions with an implied 'any' type. */
+    "noUncheckedIndexedAccess": false,           /* Describe objects with unknown keys but known values  from index signatures */
+    "noUnusedLocals": true,                      /* Report errors on unused locals. */
+    "noUnusedParameters": false,                 /* Report errors on unused parameters. */
+    "strict": false,                             /* Enable all strict type-checking options. */
+    "strictNullChecks": false,                   /* Enable strict null checks. */
+    "strictFunctionTypes": false,                /* Enable strict checking of function types. */
+    "strictBindCallApply": true,                 /* Enable strict 'bind', 'call', and 'apply' methods on functions. */
+    "strictPropertyInitialization": false,       /* Enable strict checking of property initialization in classes. */
+    "alwaysStrict": false,                       /* Parse in strict mode and emit "use strict" for each source file. */
+
+
+    /* Javascript Support */
+    "allowJs": false,
+    "checkJs": false,
+
+    /* Additional Checks */
+
+    "noFallthroughCasesInSwitch": true,        /* Report errors for fallthrough cases in switch statement. */
+    "isolatedModules": true                    /* Provides a warning when code cannot be correctly interpreted by a single-file transpiler */
+  }
 }
